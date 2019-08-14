@@ -122,13 +122,24 @@ public class UserControllerTest {
         System.out.println("发送的时间是：" + System.currentTimeMillis());
         Date date = new Date(LocalDateTime.now().plusYears(1).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
         String content = "{\"id\":\"1\",\"name\":\"learning\",\"password\":null,\"birthday\":" + date.getTime() + "}";
-        String result = mockMvc.perform(MockMvcRequestBuilders.put("/user")
+        String result = mockMvc.perform(MockMvcRequestBuilders.put("/user/1")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(content))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value("1"))
                 .andReturn().getResponse().getContentAsString();
         System.out.println("返回结果result：" + result);
+    }
+
+    /**
+     * 测试删除
+     * @throws Exception
+     */
+    @Test
+    public void whenDeleteSuccess() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete("/user/1")
+                .contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
 }

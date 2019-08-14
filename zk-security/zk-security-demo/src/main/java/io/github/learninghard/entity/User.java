@@ -1,6 +1,7 @@
 package io.github.learninghard.entity;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import io.github.learninghard.validator.MyConstraint;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Past;
@@ -25,9 +26,10 @@ public class User {
 
     private String id;
 
+    @MyConstraint
     private String name;
 
-    @NotBlank
+    @NotBlank(message = "密码不能为空")
     private String password;
 
     @Past(message = "生日必须是过去的时间")

@@ -68,8 +68,8 @@ public class UserController {
         return user;
     }
 
-    @PutMapping
-    public User update(@Valid @RequestBody User user, BindingResult errors) {
+    @PutMapping("/{id:\\d+}")
+    public User update(@PathVariable String id, @Valid @RequestBody User user, BindingResult errors) {
         if(errors.hasErrors()){
             errors.getAllErrors().stream().forEach(
                     error -> {
@@ -80,5 +80,10 @@ public class UserController {
         System.out.println("接收到的参数user：" + ReflectionToStringBuilder.toString(user, ToStringStyle.MULTI_LINE_STYLE));
         System.out.println("接收到的时间是：" + user.getBirthday());
         return user;
+    }
+
+    @DeleteMapping("/{id:\\d+}")
+    public void delete(@PathVariable String id) {
+        System.out.println("删除数据的Id:" + id);
     }
 }
