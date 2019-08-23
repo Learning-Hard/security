@@ -2,6 +2,7 @@ package io.github.learninghard.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import io.github.learninghard.entity.User;
+import io.github.learninghard.exeception.ResourceNotExistException;
 import io.github.learninghard.vo.UserQueryCondition;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -53,13 +54,18 @@ public class UserController {
     @GetMapping("/{id:\\d+}") //路径上可以使用正则表达式
     @JsonView(User.UserDetailView.class)
     public User getInfo(@PathVariable String id) {
-        System.out.println("传入的参数id："+id);
-        return new User("learning","12345678");
+
+//        throw new RuntimeException("user not exist");
+//
+        throw new ResourceNotExistException(id);
+
+//        System.out.println("传入的参数id：" + id);
+//        return new User("learning", "12345678");
     }
 
     @PostMapping
     public User create(@Valid @RequestBody User user, BindingResult errors) {
-        if(errors.hasErrors()){
+        if (errors.hasErrors()) {
             errors.getAllErrors().stream().forEach(error -> System.out.println(error.getDefaultMessage()));
         }
         System.out.println("接收到的参数user：" + ReflectionToStringBuilder.toString(user, ToStringStyle.MULTI_LINE_STYLE));
@@ -70,7 +76,7 @@ public class UserController {
 
     @PutMapping("/{id:\\d+}")
     public User update(@PathVariable String id, @Valid @RequestBody User user, BindingResult errors) {
-        if(errors.hasErrors()){
+        if (errors.hasErrors()) {
             errors.getAllErrors().stream().forEach(
                     error -> {
                         FieldError err = (FieldError) error;
