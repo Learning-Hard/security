@@ -21,7 +21,7 @@ import java.util.List;
  * \* Description: 配置类
  * \
  */
-@Configuration
+//@Configuration
 public class WebConfig extends WebMvcConfigurationSupport {
 
     /**

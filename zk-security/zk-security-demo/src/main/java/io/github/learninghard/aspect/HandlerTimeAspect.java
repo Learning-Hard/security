@@ -17,8 +17,8 @@ import org.springframework.web.method.HandlerMethod;
  * \* Description: 处理时间切片,这是一个切片类
  * \
  */
-@Aspect
-@Component
+//@Aspect
+//@Component
 public class HandlerTimeAspect {
     Logger logger = LoggerFactory.getLogger(HandlerMethod.class);
 
