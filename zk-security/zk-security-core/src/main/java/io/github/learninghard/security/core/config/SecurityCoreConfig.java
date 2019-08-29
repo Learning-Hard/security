@@ -1,4 +1,4 @@
-package io.github.learninghard.security.core;
+package io.github.learninghard.security.core.config;
 
 import io.github.learninghard.security.core.properties.SecurityProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
  * \* Date: 2019-08-29
  * \* Time: 0:17
  * \* To change this template use File | Settings | File Templates.
- * \* Description:
+ * \* Description: 注入SpringSecurity配置
  * \
  */
 @Configuration

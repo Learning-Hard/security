@@ -16,3 +16,8 @@ spring:
       name: root
       password: 123
 
+#自定义参数
+#zk:
+#  security:
+#    browser:
+
