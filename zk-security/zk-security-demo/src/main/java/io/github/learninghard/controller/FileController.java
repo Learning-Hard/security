@@ -55,9 +55,11 @@ public class FileController {
          * 将流放在try中，会自动关闭流
          */
         try (InputStream fileInputStream = new FileInputStream(new File(path))) {
+            /* 设置ContentType 可以解决输出流乱码问题 */
+            response.setContentType("image/jpeg;charset=UTF-8");
             ServletOutputStream outputStream = response.getOutputStream();
             /**
-             * 将输入流复制到输出流
+             * Tomcat提供的类 将输入流复制到输出流
              */
             IOUtils.copy(fileInputStream, outputStream);
             outputStream.flush();
