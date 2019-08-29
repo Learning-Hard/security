@@ -1,6 +1,9 @@
 package io.github.learninghard.security.browser;
 
 import io.github.learninghard.security.core.properties.SecurityProperties;
+import io.github.learninghard.security.core.vo.MsgCode;
+import io.github.learninghard.security.core.vo.ServiceResult;
+import io.github.learninghard.security.core.vo.StatusCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +55,7 @@ public class BrowserSecurityController {
      */
     @RequestMapping("/authentication/require")
     @ResponseStatus(code = HttpStatus.UNAUTHORIZED)
-    public String requireAuthentication(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public ServiceResult requireAuthentication(HttpServletRequest request, HttpServletResponse response) throws IOException {
         /* 根据request和resopnse拿到缓存信息 */
         SavedRequest savedRequest = requestCache.getRequest(request, response);
         if (savedRequest != null) {
@@ -63,7 +66,6 @@ public class BrowserSecurityController {
                 redirectStrategy.sendRedirect(request,response,securityProperties.getBrowser().getLoginPage());
             }
         }
-        // TODO 这里最好是返回JSON对象
-        return "错误信息:还没授权呢,回去授权吧...";
+        return new ServiceResult().setRSP(StatusCode.CODE_4000.getKey(),MsgCode.FAILURE.getKey(),null);
     }
 }
