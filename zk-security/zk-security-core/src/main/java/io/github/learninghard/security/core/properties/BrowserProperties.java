@@ -1,5 +1,7 @@
 package io.github.learninghard.security.core.properties;
 
+import lombok.Data;
+
 /**
  * \* Created with IntelliJ IDEA.
  * \* User: Learning-Hard
@@ -9,16 +11,10 @@ package io.github.learninghard.security.core.properties;
  * \* Description: 登陆页面信息
  * \
  */
+@Data
 public class BrowserProperties {
 
     /* 登陆页面默认值 */
     private String loginPage = "/signIn.html";
 
-    public String getLoginPage() {
-        return loginPage;
-    }
-
-    public void setLoginPage(String loginPage) {
-        this.loginPage = loginPage;
-    }
 }

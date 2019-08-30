@@ -1,5 +1,6 @@
 package io.github.learninghard.security.core.properties;
 
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
@@ -11,16 +12,15 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * \* Description: 登陆框架配置信息，统一前缀 zk.security
  * \
  */
+@Data
 @ConfigurationProperties(prefix = "zk.security")/*使用ConfigurationProperties声明配置类*/
 public class SecurityProperties {
 
+    /* 浏览器适配参数 */
     private BrowserProperties browser = new BrowserProperties();
 
-    public BrowserProperties getBrowser() {
-        return browser;
-    }
+    /* 验证码适配参数 */
+    private ValidateCodeProperties code = new ValidateCodeProperties();
 
-    public void setBrowser(BrowserProperties browser) {
-        this.browser = browser;
-    }
+
 }
