@@ -13,13 +13,18 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * \
  */
 @Data
-@ConfigurationProperties(prefix = "zk.security")/*使用ConfigurationProperties声明配置类*/
+@ConfigurationProperties(prefix = "zk.security")
+/**使用ConfigurationProperties声明配置类*/
 public class SecurityProperties {
 
-    /* 浏览器适配参数 */
+    /**
+     * 浏览器适配参数
+     */
     private BrowserProperties browser = new BrowserProperties();
 
-    /* 验证码适配参数 */
+    /**
+     * 验证码适配参数
+     */
     private ValidateCodeProperties code = new ValidateCodeProperties();
 
 

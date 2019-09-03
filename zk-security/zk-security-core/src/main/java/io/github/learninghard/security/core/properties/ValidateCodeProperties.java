@@ -8,18 +8,20 @@ import lombok.Data;
  * \* Date: 2019-08-29
  * \* Time: 15:58
  * \* To change this template use File | Settings | File Templates.
- * \* Description: 验证码配置可以兼容【短信,邮箱,图片】
+ * \* Description: 验证码配置可以兼容【短信,邮箱,图片】, 支持指定URI验证码校验请求
  * \
  */
-
 @Data
 public class ValidateCodeProperties {
+
+    /** 需要验证码校验的请求 */
+    private String validateUrl = "";
 
     /**
      * 验证码通用的配置属性【短信,邮箱,图片】
      */
-    private int codeCount = 6;/*验证码长度*/
-    private Long expireTimeIn = 180L;/*多长时间过期,单位秒*/
+    private int codeCount = 4;/*验证码长度*/
+    private int expireTimeIn = 180;/*多长时间过期,单位秒*/
 
     /**
      * 图片特有的属性
