@@ -1,7 +1,6 @@
-package io.github.learninghard.security.browser;
+package io.github.learninghard.security.browser.controller;
 
 import io.github.learninghard.security.core.properties.SecurityProperties;
-import io.github.learninghard.security.core.vo.MsgCode;
 import io.github.learninghard.security.core.vo.ServiceResult;
 import io.github.learninghard.security.core.vo.StatusCode;
 import org.slf4j.Logger;
@@ -36,10 +35,10 @@ public class BrowserSecurityController {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
-    @Autowired/*配置类*/
+    @Autowired/** 配置类*/
     private SecurityProperties securityProperties;
 
-    /* 请求缓存 */
+    /** 请求缓存 */
     private RequestCache requestCache = new HttpSessionRequestCache();
 
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
@@ -66,6 +65,6 @@ public class BrowserSecurityController {
                 redirectStrategy.sendRedirect(request,response,securityProperties.getBrowser().getLoginPage());
             }
         }
-        return new ServiceResult().setRSP(StatusCode.CODE_4000.getKey(),MsgCode.FAILURE.getKey(),null);
+        return new ServiceResult().setRSP(StatusCode.CODE_4000.getKey(),"引导用户进入登陆页面",null);
     }
 }

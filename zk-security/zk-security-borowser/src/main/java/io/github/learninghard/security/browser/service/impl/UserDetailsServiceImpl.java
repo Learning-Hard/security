@@ -1,4 +1,4 @@
-package io.github.learninghard.security.browser;
+package io.github.learninghard.security.browser.service.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,12 +19,13 @@ import org.springframework.stereotype.Component;
  * \* To change this template use File | Settings | File Templates.
  * \* Description: 自定义认证逻辑,登陆数据的存取,指定加密方式,是否校验过期,黑名单等
  * \
+ * @author Learning-Hard
  */
 @Component
 public class UserDetailsServiceImpl implements UserDetailsService {
     private Logger logger = LoggerFactory.getLogger(getClass());
 
-    /*加密算法*/
+    /** 加密算法*/
     @Autowired
     PasswordEncoder passwordEncoder;
 
