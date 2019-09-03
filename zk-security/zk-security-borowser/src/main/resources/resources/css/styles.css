@@ -75,7 +75,7 @@ form {
   position: relative;
   z-index: 2;
 }
-form input {
+.xx {
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
@@ -94,10 +94,10 @@ form input {
           transition-duration: 0.25s;
   font-weight: 300;
 }
-form input:hover {
+.xx:hover {
   background-color: rgba(255, 255, 255, 0.4);
 }
-form input:focus {
+.xx:focus {
   background-color: white;
   width: 300px;
   color: #53e3a6;
