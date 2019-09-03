@@ -1,5 +1,8 @@
 package io.github.learninghard.security.core.vo;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 /**
  * \* Created with IntelliJ IDEA.
  * \* User: Learning-Hard
@@ -9,6 +12,8 @@ package io.github.learninghard.security.core.vo;
  * \* Description: 服务请求状态编码
  * \
  */
+@Getter
+@AllArgsConstructor
 public enum StatusCode {
     DEFAULT("0000", "数据处理正确"),
     CODE_1000("1000", "请求参数错误"),
@@ -20,17 +25,4 @@ public enum StatusCode {
 
     private final String key;
     private final String desc;
-
-    public String getKey() {
-        return this.key;
-    }
-
-    public String getDesc() {
-        return this.desc;
-    }
-
-    private StatusCode(String key, String desc) {
-        this.key = key;
-        this.desc = desc;
-    }
 }
