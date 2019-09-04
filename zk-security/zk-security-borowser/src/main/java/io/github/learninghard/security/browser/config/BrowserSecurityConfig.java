@@ -1,6 +1,8 @@
 package io.github.learninghard.security.browser.config;
 
+import io.github.learninghard.security.core.authentication.config.SmsCodeAuthenticationSecurityConfig;
 import io.github.learninghard.security.core.properties.SecurityProperties;
+import io.github.learninghard.security.core.validate.filter.SmsCodeFilter;
 import io.github.learninghard.security.core.validate.filter.ValidateCodeFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -45,6 +47,9 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired /** 数据源*/
     private DataSource dataSource;
 
+    @Autowired
+    SmsCodeAuthenticationSecurityConfig smsCodeAuthenticationSecurityConfig;
+
     /**
      * 指定加密算法,新版本必须指定加密算法，否则会报错
      * @return
@@ -79,11 +84,18 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
         validateCodeFilter.setSecurityProperties(securityProperties);
         validateCodeFilter.setAuthenticationFailureHandler(authenticationFailureHandler);
 
+
+        /** 短信验证码校验 */
+        SmsCodeFilter smsCodeFilter = new SmsCodeFilter();
+        validateCodeFilter.setSecurityProperties(securityProperties);
+        validateCodeFilter.setAuthenticationFailureHandler(authenticationFailureHandler);
+
         /**
          * httpbasic:以浏览器弹出框的形式进行认证校验
          * formLogin:以表单页面的方式进行校验
          */
-        http.addFilterBefore(validateCodeFilter, UsernamePasswordAuthenticationFilter.class)
+        http.addFilterBefore(smsCodeFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(validateCodeFilter, UsernamePasswordAuthenticationFilter.class)
                 .formLogin()
                 /*自定义登陆页面*/
                 .loginPage("/authentication/require")
@@ -110,7 +122,8 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest()
                 .authenticated()
                 .and()
-                .csrf().disable();
+                .csrf().disable()
+                .apply(smsCodeAuthenticationSecurityConfig);
     }
 
 
