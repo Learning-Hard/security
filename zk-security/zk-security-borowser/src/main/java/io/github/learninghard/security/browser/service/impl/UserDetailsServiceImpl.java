@@ -31,6 +31,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        /**
+         * TODO: 修改说明
+         * 1、加密算法可以去掉，后期直接从数据库或者缓存取用户的密码和权限信息然后返回
+         * 2、返回User对象后期可以支持过期，冻结，等功能
+         */
+
         logger.info("登陆用户为" + username);
         logger.info("登陆用户密码为：" + passwordEncoder.encode("123456"));
 

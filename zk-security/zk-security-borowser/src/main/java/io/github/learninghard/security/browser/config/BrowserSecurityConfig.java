@@ -1,19 +1,15 @@
 package io.github.learninghard.security.browser.config;
 
-import io.github.learninghard.security.core.authentication.config.SmsCodeAuthenticationSecurityConfig;
+import io.github.learninghard.security.core.config.SmsCodeAuthenticationSecurityConfig;
+import io.github.learninghard.security.core.config.ValidateCodeSecurityConfig;
+import io.github.learninghard.security.core.config.AbstractChannelSecurityConfig;
 import io.github.learninghard.security.core.properties.SecurityProperties;
-import io.github.learninghard.security.core.validate.filter.SmsCodeFilter;
-import io.github.learninghard.security.core.validate.filter.ValidateCodeFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.stereotype.Component;
@@ -33,25 +29,25 @@ import javax.sql.DataSource;
  * @author Learning-Hard
  */
 @Component
-public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
+public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
 
-    @Autowired /** 配置类*/
+    @Autowired
+    /** 配置类*/
     private SecurityProperties securityProperties;
 
-    @Autowired /** 认证成功处理器*/
-    private AuthenticationSuccessHandler authenticationSuccessHandler;
-
-    @Autowired /** 认证失败处理器*/
-    private AuthenticationFailureHandler authenticationFailureHandler;
-
-    @Autowired /** 数据源*/
+    @Autowired
+    /** 数据源*/
     private DataSource dataSource;
 
     @Autowired
     SmsCodeAuthenticationSecurityConfig smsCodeAuthenticationSecurityConfig;
 
+    @Autowired
+    ValidateCodeSecurityConfig validateCodeSecurityConfig;
+
     /**
      * 指定加密算法,新版本必须指定加密算法，否则会报错
+     *
      * @return
      */
     @Bean
@@ -62,10 +58,11 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 
     /**
      * 记住我功能数据源配置
+     *
      * @return
      */
     @Bean
-    public PersistentTokenRepository persistentTokenRepository(){
+    public PersistentTokenRepository persistentTokenRepository() {
         JdbcTokenRepositoryImpl tokenRepository = new JdbcTokenRepositoryImpl();
         tokenRepository.setDataSource(dataSource);
 //        tokenRepository.setCreateTableOnStartup(true); //自动创建数据库的脚本
@@ -79,31 +76,14 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        /** 自定义验证码校验 */
-        ValidateCodeFilter validateCodeFilter = new ValidateCodeFilter();
-        validateCodeFilter.setSecurityProperties(securityProperties);
-        validateCodeFilter.setAuthenticationFailureHandler(authenticationFailureHandler);
-
-
-        /** 短信验证码校验 */
-        SmsCodeFilter smsCodeFilter = new SmsCodeFilter();
-        validateCodeFilter.setSecurityProperties(securityProperties);
-        validateCodeFilter.setAuthenticationFailureHandler(authenticationFailureHandler);
-
+        applyPasswordAuthenticationConfig(http);
         /**
          * httpbasic:以浏览器弹出框的形式进行认证校验
          * formLogin:以表单页面的方式进行校验
          */
-        http.addFilterBefore(smsCodeFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(validateCodeFilter, UsernamePasswordAuthenticationFilter.class)
-                .formLogin()
-                /*自定义登陆页面*/
-                .loginPage("/authentication/require")
-                /*登陆处理请求*/
-                .loginProcessingUrl("/authentication/form")
-                .successHandler(authenticationSuccessHandler)
-                .failureHandler(authenticationFailureHandler)
-                /** 登陆表单设置完毕 */
+        http.apply(validateCodeSecurityConfig)
+                .and()
+                .apply(smsCodeAuthenticationSecurityConfig)
                 .and()
                 /* 开启记住我功能 */
                 .rememberMe()
@@ -117,13 +97,12 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 /* 指定请求放行 */
-                .antMatchers("/css/**", "/js/**","/validatecode/**","/authentication/require", securityProperties.getBrowser().getLoginPage()).permitAll()
+                .antMatchers("/css/**", "/js/**", "/validatecode/**", "/authentication/require", securityProperties.getBrowser().getLoginPage()).permitAll()
                 /* 拦截所有请求 */
                 .anyRequest()
                 .authenticated()
                 .and()
-                .csrf().disable()
-                .apply(smsCodeAuthenticationSecurityConfig);
+                .csrf().disable();
     }
 
 

@@ -1,5 +1,6 @@
 package io.github.learninghard.security.browser.controller;
 
+import io.github.learninghard.security.core.properties.SecurityConstants;
 import io.github.learninghard.security.core.properties.SecurityProperties;
 import io.github.learninghard.security.core.vo.ServiceResult;
 import io.github.learninghard.security.core.vo.StatusCode;
@@ -31,22 +32,24 @@ import java.io.IOException;
  * \
  */
 @RestController
-public class BrowserSecurityController {
-
+public class SecurityController {
     private Logger logger = LoggerFactory.getLogger(getClass());
 
-    @Autowired/** 配置类*/
+    @Autowired
+/** 配置类*/
     private SecurityProperties securityProperties;
 
-    /** 请求缓存 */
+    /**
+     * 请求缓存
+     */
     private RequestCache requestCache = new HttpSessionRequestCache();
 
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
     /**
      * 作用：
-     *  未授权请求html,跳转到登陆页面
-     *  非html请求,返回错误提示信息
+     * 未授权请求html,跳转到登陆页面
+     * 非html请求,返回错误提示信息
      *
      * @param request
      * @param response
@@ -55,16 +58,16 @@ public class BrowserSecurityController {
     @RequestMapping("/authentication/require")
     @ResponseStatus(code = HttpStatus.UNAUTHORIZED)
     public ServiceResult requireAuthentication(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        /* 根据request和resopnse拿到缓存信息 */
+        /** 根据request和resopnse拿到缓存信息 */
         SavedRequest savedRequest = requestCache.getRequest(request, response);
         if (savedRequest != null) {
             String targetUrl = savedRequest.getRedirectUrl();
             logger.info("请求跳转url:" + targetUrl);
             /* 未授权请求地址为html,跳转到登陆页面 */
-            if(StringUtils.endsWithIgnoreCase(targetUrl,".html")){
-                redirectStrategy.sendRedirect(request,response,securityProperties.getBrowser().getLoginPage());
+            if (StringUtils.endsWithIgnoreCase(targetUrl, ".html")) {
+                redirectStrategy.sendRedirect(request, response, securityProperties.getBrowser().getLoginPage());
             }
         }
-        return new ServiceResult().setRSP(StatusCode.CODE_4000.getKey(),"引导用户进入登陆页面",null);
+        return new ServiceResult().setRSP(StatusCode.CODE_4000.getKey(), "引导用户进入登陆页面", null);
     }
 }

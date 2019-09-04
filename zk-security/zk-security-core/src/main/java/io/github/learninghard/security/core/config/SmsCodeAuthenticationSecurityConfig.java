@@ -1,4 +1,4 @@
-package io.github.learninghard.security.core.authentication.config;
+package io.github.learninghard.security.core.config;
 
 import io.github.learninghard.security.core.authentication.SmsCodeAuthenticationFilter;
 import io.github.learninghard.security.core.authentication.SmsCodeAuthenticationProvider;
@@ -21,7 +21,7 @@ import javax.annotation.Resource;
  * \* Date: 2019-09-04
  * \* Time: 0:11
  * \* To change this template use File | Settings | File Templates.
- * \* Description:
+ * \* Description: 短信授权登陆
  * \
  */
 @Component
@@ -36,9 +36,11 @@ public class SmsCodeAuthenticationSecurityConfig extends SecurityConfigurerAdapt
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        /* 设置短信登陆过滤器 */
+        /**
+         * 短信登陆请求过滤器
+         */
         SmsCodeAuthenticationFilter smsCodeAuthenticationFilter = new SmsCodeAuthenticationFilter();
-        /* 将短信登陆过滤器交给AuthenticationManager管理 */
+        /** 将短信登陆过滤器交给AuthenticationManager管理 */
         smsCodeAuthenticationFilter.setAuthenticationManager(http.getSharedObject(AuthenticationManager.class));
         smsCodeAuthenticationFilter.setAuthenticationSuccessHandler(authenticationSuccessHandler);
         smsCodeAuthenticationFilter.setAuthenticationFailureHandler(authenticationFailureHandler);
@@ -50,4 +52,5 @@ public class SmsCodeAuthenticationSecurityConfig extends SecurityConfigurerAdapt
         http.authenticationProvider(smsCodeAuthenticationProvider)
                 .addFilterAfter(smsCodeAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }
+
 }
