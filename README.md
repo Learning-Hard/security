@@ -12,7 +12,7 @@
 
 
 示例：【系统默认实现】
-```$java
+```java
 package io.github.learninghard.security.core.validate.service.impl;
 
 import io.github.learninghard.security.core.properties.SecurityProperties;
@@ -116,12 +116,30 @@ public class DefaultImageCodeGenerator implements IValidateCodeGenerator {
         }
         // 将四位数字的验证码保存到Session中。
         imageCode = randomCode.toString();
-        /* 默认写死5分钟过期 */
+        /* 过期时间 */
         return new ImageCode(bufferedImage, imageCode, (long) securityProperties.getCode().getExpireTimeIn());
     }
 }
-
 ```
+### 2、短信验证码校验器
+
+### 3、自定义短信发送
+- 实现 `ISmsCodeSender`接口
+
+示例:【默认短信发送类】
+```java
+public class DefaultSmsCodeSender implements ISmsCodeSender {
+    private Logger logger = LoggerFactory.getLogger(getClass());
+
+    @Override
+    public void send(String mobile, String code) {
+        logger.info("向手机号:" + mobile + "发送短信验证码是" + code);
+
+    }
+}
+```
+### 3、验证码默认参数配置
+
 
 
 ### 参数配置
