@@ -24,7 +24,6 @@ import java.util.Map;
 public abstract class AbstractValidateCodeProcesser<C extends ValidateCode> implements IValidateCodeProcesser {
     private Logger logger= LoggerFactory.getLogger(getClass());
 
-
     /**
      * Session操作类
      */
@@ -65,11 +64,6 @@ public abstract class AbstractValidateCodeProcesser<C extends ValidateCode> impl
      * @return
      */
     private C generate(ServletWebRequest request) {
-
-        for (String key : validateCodeGeneratorMap.keySet()) {
-            logger.info("验证器名为:" + key);
-        }
-
         String generatorName = getPorcesserType(request) + "CodeGenerator";
         IValidateCodeGenerator validateCodeGenerator = validateCodeGeneratorMap.get(generatorName);
         if (validateCodeGenerator == null) {
@@ -82,9 +76,8 @@ public abstract class AbstractValidateCodeProcesser<C extends ValidateCode> impl
      * 保存验证码
      */
     private void save(ServletWebRequest request, ValidateCode validateCode) {
-        sessionStrategy.setAttribute(request, IValidateCodeProcesser.SESSION_KEY_PREFIX + getPorcesserType(request), validateCode.getCode());
+        sessionStrategy.setAttribute(request, IValidateCodeProcesser.SESSION_KEY_PREFIX + getPorcesserType(request).toUpperCase(), validateCode.getCode());
     }
-
 
     /**
      * 发送校验码，由子类实现
