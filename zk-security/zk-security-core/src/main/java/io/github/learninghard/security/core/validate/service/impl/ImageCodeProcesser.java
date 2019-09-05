@@ -17,11 +17,11 @@ import javax.servlet.http.HttpServletResponse;
  * \* Description: 图片验证码处理器
  * \
  */
-@Component("imagecodeprocesser")
+@Component("imageCodeProcesser")
 public class ImageCodeProcesser extends AbstractValidateCodeProcesser<ImageCode> {
 
     @Override
-    protected void send(ServletWebRequest request, ImageCode validateCode) throws Exception {
+    protected void sendValidateCode(ServletWebRequest request, ImageCode validateCode) throws Exception {
         HttpServletResponse response = request.getResponse();
         response.setContentType("image/jpeg;charset=UTF-8");
         ImageIO.write(validateCode.getImage(), "JPEG", response.getOutputStream());

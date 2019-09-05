@@ -19,14 +19,14 @@ import org.springframework.web.context.request.ServletWebRequest;
  * \* Description: 短信验证码处理器
  * \
  */
-@Component("smscodeprocesser")
+@Component("smsCodeProcesser")
 public class SmsCodeProcesser extends AbstractValidateCodeProcesser<ValidateCode> {
 
     @Autowired
     ISmsCodeSender smsCodeSender;
 
     @Override
-    protected void send(ServletWebRequest request, ValidateCode validateCode) throws Exception {
+    protected void sendValidateCode(ServletWebRequest request, ValidateCode validateCode) throws Exception {
         String mobile = ServletRequestUtils.getStringParameter(request.getRequest(), SecurityConstants.DEFAULT_PARAMETER_NAME_MOBILE);
         smsCodeSender.send(mobile,validateCode.getCode());
     }
