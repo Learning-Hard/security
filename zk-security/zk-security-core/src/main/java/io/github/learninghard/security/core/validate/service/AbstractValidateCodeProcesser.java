@@ -46,8 +46,8 @@ public abstract class AbstractValidateCodeProcesser<C extends ValidateCode> impl
          * * 3、发送验证码
          * */
         C validateCode = generate(request);
-        save(request, validateCode);
-        send(request, validateCode);
+        saveValidateCode(request, validateCode);
+        sendValidateCode(request, validateCode);
     }
 
     /**
@@ -56,7 +56,7 @@ public abstract class AbstractValidateCodeProcesser<C extends ValidateCode> impl
      * @param request
      * @return
      */
-    private ValidateCodeType getPorcesserType(ServletWebRequest request) {
+    private ValidateCodeType getValidateCodeType(ServletWebRequest request) {
         ValidateCodeType validateCodeType;
         String type = StringUtils.substringAfter(request.getRequest().getRequestURI(), "/validatecode/").toUpperCase();
         switch (type) {
@@ -82,7 +82,7 @@ public abstract class AbstractValidateCodeProcesser<C extends ValidateCode> impl
      * @return
      */
     private C generate(ServletWebRequest request) {
-        String generatorName = getPorcesserType(request).getValue() + "Generator";
+        String generatorName = getValidateCodeType(request).getValue() + "Generator";
         IValidateCodeGenerator validateCodeGenerator = validateCodeGeneratorMap.get(generatorName);
         if (validateCodeGenerator == null) {
             throw new ValidateCodeException("验证码生成器" + generatorName + "不存在");
@@ -93,9 +93,10 @@ public abstract class AbstractValidateCodeProcesser<C extends ValidateCode> impl
     /**
      * 保存验证码
      */
-    private void save(ServletWebRequest request, ValidateCode validateCode) {
-        sessionStrategy.setAttribute(request, IValidateCodeProcesser.SESSION_KEY_PREFIX + getPorcesserType(request).getValue().toUpperCase(), validateCode.getCode());
+    private void saveValidateCode(ServletWebRequest request, ValidateCode validateCode) {
+        sessionStrategy.setAttribute(request, IValidateCodeProcesser.SESSION_KEY_PREFIX + getValidateCodeType(request).getValue().toUpperCase(), validateCode);
     }
+
 
     /**
      * 发送校验码,由子类具体实现,实现方式不一样
@@ -104,6 +105,6 @@ public abstract class AbstractValidateCodeProcesser<C extends ValidateCode> impl
      * @param validateCode
      * @throws Exception
      */
-    protected abstract void send(ServletWebRequest request, C validateCode) throws Exception;
+    protected abstract void sendValidateCode(ServletWebRequest request, C validateCode) throws Exception;
 
 }

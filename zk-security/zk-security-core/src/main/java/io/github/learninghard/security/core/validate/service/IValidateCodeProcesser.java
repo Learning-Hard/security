@@ -25,4 +25,5 @@ public interface IValidateCodeProcesser {
      * 3、发送验证码
      */
     void create(ServletWebRequest request) throws Exception;
+
 }

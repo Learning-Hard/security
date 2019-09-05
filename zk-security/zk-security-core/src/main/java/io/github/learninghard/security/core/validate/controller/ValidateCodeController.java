@@ -42,7 +42,7 @@ public class ValidateCodeController {
     @GetMapping("/{type}")
     public void sendCode(HttpServletRequest request, HttpServletResponse response,@PathVariable String type) throws Exception {
         //TODO 这里看看有没有优化的方法，避免代码写死
-        String processername = type + "codeprocesser";
+        String processername = type + "CodeProcesser";
         IValidateCodeProcesser iValidateCodeProcesser = validateCodeProcesserMap.get(processername);
         if (iValidateCodeProcesser == null) {
             System.out.println("不存在");

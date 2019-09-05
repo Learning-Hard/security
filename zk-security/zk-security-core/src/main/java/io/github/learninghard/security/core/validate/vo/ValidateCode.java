@@ -42,11 +42,10 @@ public class ValidateCode {
     }
 
     /**
-     * 校验当前是否是在指定时间之后
-     * @param dateTime
+     * 校验当前时间是否超过过期时间
      * @return
      */
-    public boolean isExpired(LocalDateTime dateTime){
-        return LocalDateTime.now().isAfter(dateTime);
+    public boolean isExpired(){
+        return LocalDateTime.now().isAfter(expireTime);
     }
 }
