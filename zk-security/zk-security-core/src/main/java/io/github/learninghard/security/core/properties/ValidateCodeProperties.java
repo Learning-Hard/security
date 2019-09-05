@@ -14,8 +14,10 @@ import lombok.Data;
 @Data
 public class ValidateCodeProperties {
 
-    /** 需要验证码校验的请求 */
-    private String validateUrl = "";
+    /** 需要图片验证码校验的请求 */
+    private String validateImageCodeUrl = "";
+    /** 需要短信验证码校验的请求 */
+    private String validateSmsCodeUrl = "";
 
     /**
      * 验证码通用的配置属性【短信,邮箱,图片】

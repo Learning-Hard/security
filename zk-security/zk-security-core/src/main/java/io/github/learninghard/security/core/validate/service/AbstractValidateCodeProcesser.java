@@ -2,6 +2,7 @@ package io.github.learninghard.security.core.validate.service;
 
 import io.github.learninghard.security.core.validate.exception.ValidateCodeException;
 import io.github.learninghard.security.core.validate.vo.ValidateCode;
+import io.github.learninghard.security.core.validate.vo.ValidateCodeType;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,9 +21,11 @@ import java.util.Map;
  * \* To change this template use File | Settings | File Templates.
  * \* Description:
  * \
+ *
+ * @author Learning-Hard
  */
 public abstract class AbstractValidateCodeProcesser<C extends ValidateCode> implements IValidateCodeProcesser {
-    private Logger logger= LoggerFactory.getLogger(getClass());
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
     /**
      * Session操作类
@@ -53,8 +56,23 @@ public abstract class AbstractValidateCodeProcesser<C extends ValidateCode> impl
      * @param request
      * @return
      */
-    private String getPorcesserType(ServletWebRequest request) {
-        return StringUtils.substringAfter(request.getRequest().getRequestURI(), "/validatecode/");
+    private ValidateCodeType getPorcesserType(ServletWebRequest request) {
+        ValidateCodeType validateCodeType;
+        String type = StringUtils.substringAfter(request.getRequest().getRequestURI(), "/validatecode/").toUpperCase();
+        switch (type) {
+            case "SMS":
+                validateCodeType = ValidateCodeType.SMS;
+                break;
+            case "IMAGE":
+                validateCodeType = ValidateCodeType.IMAGE;
+                break;
+            case "EMAIL":
+                validateCodeType = ValidateCodeType.EMAIL;
+                break;
+            default:
+                validateCodeType = null;
+        }
+        return validateCodeType;
     }
 
     /**
@@ -64,7 +82,7 @@ public abstract class AbstractValidateCodeProcesser<C extends ValidateCode> impl
      * @return
      */
     private C generate(ServletWebRequest request) {
-        String generatorName = getPorcesserType(request) + "CodeGenerator";
+        String generatorName = getPorcesserType(request).getValue() + "Generator";
         IValidateCodeGenerator validateCodeGenerator = validateCodeGeneratorMap.get(generatorName);
         if (validateCodeGenerator == null) {
             throw new ValidateCodeException("验证码生成器" + generatorName + "不存在");
@@ -76,11 +94,11 @@ public abstract class AbstractValidateCodeProcesser<C extends ValidateCode> impl
      * 保存验证码
      */
     private void save(ServletWebRequest request, ValidateCode validateCode) {
-        sessionStrategy.setAttribute(request, IValidateCodeProcesser.SESSION_KEY_PREFIX + getPorcesserType(request).toUpperCase(), validateCode.getCode());
+        sessionStrategy.setAttribute(request, IValidateCodeProcesser.SESSION_KEY_PREFIX + getPorcesserType(request).getValue().toUpperCase(), validateCode.getCode());
     }
 
     /**
-     * 发送校验码，由子类实现
+     * 发送校验码,由子类具体实现,实现方式不一样
      *
      * @param request
      * @param validateCode

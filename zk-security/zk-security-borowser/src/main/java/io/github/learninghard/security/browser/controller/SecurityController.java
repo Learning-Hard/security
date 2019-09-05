@@ -55,7 +55,7 @@ public class SecurityController {
      * @param response
      * @return
      */
-    @RequestMapping("/authentication/require")
+    @RequestMapping(SecurityConstants.DEFAULT_UNAUTHENTICATION_URL)
     @ResponseStatus(code = HttpStatus.UNAUTHORIZED)
     public ServiceResult requireAuthentication(HttpServletRequest request, HttpServletResponse response) throws IOException {
         /** 根据request和resopnse拿到缓存信息 */

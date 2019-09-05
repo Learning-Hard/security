@@ -16,7 +16,7 @@ import javax.servlet.Filter;
  * \* Date: 2019-09-04
  * \* Time: 15:17
  * \* To change this template use File | Settings | File Templates.
- * \* Description:
+ * \* Description: 验证码校验器配置
  * \
  */
 @Component("validateCodeSecurityConfig")
@@ -24,12 +24,9 @@ public class ValidateCodeSecurityConfig extends SecurityConfigurerAdapter<Defaul
 
     @Autowired
     private Filter validateCodeFilter;
-    @Autowired
-    private Filter smsCodeFilter;
 
     @Override
     public void configure(HttpSecurity builder) throws Exception {
-        builder.addFilterBefore(validateCodeFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(smsCodeFilter,UsernamePasswordAuthenticationFilter.class);
+        builder.addFilterBefore(validateCodeFilter, UsernamePasswordAuthenticationFilter.class);
     }
 }

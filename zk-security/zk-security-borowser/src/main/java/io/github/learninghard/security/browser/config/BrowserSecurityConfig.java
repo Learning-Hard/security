@@ -3,6 +3,7 @@ package io.github.learninghard.security.browser.config;
 import io.github.learninghard.security.core.config.SmsCodeAuthenticationSecurityConfig;
 import io.github.learninghard.security.core.config.ValidateCodeSecurityConfig;
 import io.github.learninghard.security.core.config.AbstractChannelSecurityConfig;
+import io.github.learninghard.security.core.properties.SecurityConstants;
 import io.github.learninghard.security.core.properties.SecurityProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -97,7 +98,7 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
                 .and()
                 .authorizeRequests()
                 /* 指定请求放行 */
-                .antMatchers("/css/**", "/js/**", "/validatecode/**", "/authentication/require", securityProperties.getBrowser().getLoginPage()).permitAll()
+                .antMatchers("/css/**", "/js/**", "/validatecode/**", SecurityConstants.DEFAULT_UNAUTHENTICATION_URL, securityProperties.getBrowser().getLoginPage()).permitAll()
                 /* 拦截所有请求 */
                 .anyRequest()
                 .authenticated()
