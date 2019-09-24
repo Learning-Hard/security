@@ -1,11 +1,13 @@
 package io.github.learninghard.security.core.validate.service;
 
 import io.github.learninghard.security.core.validate.exception.ValidateCodeException;
+import io.github.learninghard.security.core.validate.vo.ImageCode;
 import io.github.learninghard.security.core.validate.vo.ValidateCode;
 import io.github.learninghard.security.core.validate.vo.ValidateCodeType;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.connect.web.HttpSessionSessionStrategy;
 import org.springframework.social.connect.web.SessionStrategy;
@@ -94,6 +96,16 @@ public abstract class AbstractValidateCodeProcesser<C extends ValidateCode> impl
      * 保存验证码
      */
     private void saveValidateCode(ServletWebRequest request, ValidateCode validateCode) {
+        /**
+         * 图片验证码中存放了有图片信息,序列化的过程中会出错
+         *
+         * 操作是去掉图片验证码的图片信息
+         */
+        if(validateCode instanceof ImageCode){
+            ValidateCode SerializableValidateCode = new ValidateCode();
+            BeanUtils.copyProperties(validateCode, SerializableValidateCode);
+            validateCode = SerializableValidateCode;
+        }
         sessionStrategy.setAttribute(request, IValidateCodeProcesser.SESSION_KEY_PREFIX + getValidateCodeType(request).getValue().toUpperCase(), validateCode);
     }
 

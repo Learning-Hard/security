@@ -1,7 +1,9 @@
 package io.github.learninghard.security.core.validate.vo;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
@@ -14,18 +16,24 @@ import java.time.LocalDateTime;
  * \
  */
 @Data
-public class ValidateCode {
-    /** 验证码 */
+@NoArgsConstructor
+public class ValidateCode implements Serializable {
+    /**
+     * 验证码
+     */
     private String code;
-    /** 过期时间 */
+    /**
+     * 过期时间
+     */
     private LocalDateTime expireTime;
 
     /**
      * 指定过期时间
-     * @param code 验证码
+     *
+     * @param code       验证码
      * @param expireTime 过期时间
      */
-    public ValidateCode( String code , LocalDateTime expireTime) {
+    public ValidateCode(String code, LocalDateTime expireTime) {
 
         this.code = code;
         this.expireTime = expireTime;
@@ -33,19 +41,21 @@ public class ValidateCode {
 
     /**
      * 多长时间后过期
-     * @param code 验证码
+     *
+     * @param code    验证码
      * @param seconds 多少秒后过期
      */
-    public ValidateCode( String code ,Long seconds){
+    public ValidateCode(String code, Long seconds) {
         this.code = code;
         this.expireTime = LocalDateTime.now().plusSeconds(seconds);
     }
 
     /**
      * 校验当前时间是否超过过期时间
+     *
      * @return
      */
-    public boolean isExpired(){
+    public boolean isExpired() {
         return LocalDateTime.now().isAfter(expireTime);
     }
 }
