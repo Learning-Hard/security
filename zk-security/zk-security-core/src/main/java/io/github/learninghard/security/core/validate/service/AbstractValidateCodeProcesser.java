@@ -7,7 +7,6 @@ import io.github.learninghard.security.core.validate.vo.ValidateCodeType;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.connect.web.HttpSessionSessionStrategy;
 import org.springframework.social.connect.web.SessionStrategy;
@@ -102,8 +101,7 @@ public abstract class AbstractValidateCodeProcesser<C extends ValidateCode> impl
          * 操作是去掉图片验证码的图片信息
          */
         if(validateCode instanceof ImageCode){
-            ValidateCode SerializableValidateCode = new ValidateCode();
-            BeanUtils.copyProperties(validateCode, SerializableValidateCode);
+            ValidateCode SerializableValidateCode = new ValidateCode(validateCode.getCode(),validateCode.getExpireTime());
             validateCode = SerializableValidateCode;
         }
         sessionStrategy.setAttribute(request, IValidateCodeProcesser.SESSION_KEY_PREFIX + getValidateCodeType(request).getValue().toUpperCase(), validateCode);
