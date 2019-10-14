@@ -1,0 +1,55 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/sso
+    username: root
+    password: 123456
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database: mysql
+    show-sql: true
+
+  session: #缓存
+    store-type: redis
+    timeout: 15m
+  redis:
+    host: 127.0.0.1
+    password:
+    port: 6379
+    timeout: 30000
+    database: 2
+
+  #暂时这样设置
+  security:
+    user:
+      name: root
+      password: 123
+
+#自定义参数
+zk:
+  security:
+    code: #验证码参数
+      width: 100
+      height: 30
+      lineCount: 0
+    browser:
+      signUpUrl: /signUpDemo.html #自定义登陆页面地址
+    social: # 第三方授权登陆
+#      register-url: /social/signUp
+      filter-processes-url: /socialauth #认证请求拦截url
+#      bind-url: https://website/social-bind/qq
+#      callback-url: https://website/social-login
+#      connect-url: https://website/social-connect
+      qq: # qq授权配置
+        app-id: 101792780
+        app-secret: ba2815da2df2a079ec49ca73e7fa1f78
+        provider-id: qq
+      wechat: # Wechat配置
+        qq.app-id: 1
+        app-secret: 1
+        provider-id: 1

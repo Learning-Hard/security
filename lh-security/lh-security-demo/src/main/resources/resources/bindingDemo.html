@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>绑定</title>
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script>
+        $(function () {
+                $.getJSON("/user/me", function (res) {
+                    if (res && res.msg == "SUCCESS" && res.rsp.rsp_CODE == "0000") {
+                        $("#info").append("<img src='" + res.rsp.data.headImg + "'/><br/><span>" + res.rsp.data.nickname + "</span>");
+                    }
+                });
+            }
+        );
+
+        /**
+         * 使用jquery发送delete请求后台会一直重定向，原因有点迷
+         * @see <a href="https://blog.csdn.net/qq_35170213/article/details/84792377">
+         */
+        // function unbind() {
+        //     let url = '/connect/qq';
+        //     $.ajax({
+        //         type: "delete",
+        //         url: url,
+        //         success: function (msg) {
+        //             alert('解绑成功！');
+        //         }
+        //     })
+        // };
+    </script>
+</head>
+<body>
+<h2>绑定页</h2>
+<div id="info"></div>
+<!-- QQ绑定 -->
+<form action="/connect/qq" method="post">
+    <button type="submit">绑定QQ</button>
+</form>
+<!-- QQ解绑 -->
+<form action="/connect/qq" method="post">
+    <input type="hidden" name="_method" value="delete">
+    <button type="submit">解绑QQ</button>
+</form>
+<a href="/logout">退出登陆</a>
+</body>
+</html>

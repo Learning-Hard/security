@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>注册</title>
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script>
+        $(function () {
+            $.getJSON("/social/user", function (res) {
+                $("#info").append("<img src='" + res.rsp.data.headImg + "'/><br/><span>" + res.rsp.data.nickname + "</span>");
+            });
+        })
+    </script>
+</head>
+<body>
+<h2>注册页面</h2>
+<div id="info" style="float: right"></div>
+<div  style="clear: both"></div>
+<form action="/user/register" method="post">
+    <table>
+        <tr>
+            <td>用户名:</td>
+            <td><input type="text" name="username"></td>
+        </tr>
+        <tr>
+            <td>密码:</td>
+            <td><input type="password" name="password"></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <button type="submit" name="type" value="register">注册</button>
+            </td>
+        </tr>
+    </table>
+</form>
+
+</body>
+</html>
