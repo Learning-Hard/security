@@ -122,6 +122,7 @@ public class DefaultImageCodeGenerator implements IValidateCodeGenerator {
 }
 ```
 ### 2、短信验证码校验器
+系统默认实现，未提供自定义开发接口
 
 ### 3、自定义短信发送
 - 实现 `ISmsCodeSender`接口
@@ -134,12 +135,44 @@ public class DefaultSmsCodeSender implements ISmsCodeSender {
     @Override
     public void send(String mobile, String code) {
         logger.info("向手机号:" + mobile + "发送短信验证码是" + code);
-
     }
 }
 ```
 ### 3、验证码默认参数配置
-
+```yaml
+zk:
+  security:
+    browser: # 浏览器适配参数
+      loginPage: #自定义登陆页面路径
+      rememberMeSeconds: #记住我功能保存时间
+    code: #图片验证码参数
+      validateImageCodeUrl: #图片校验逻辑拦截器,拦截URL
+      validateSmsCodeUrl: #短信校验逻辑拦截器,拦截URL
+      codeCount: #验证码长度
+      expireTimeIn: # 多少秒后过期
+      width: 100 #宽度
+      height: 30 #高度
+      lineCount: #干扰线的条数
+    social: # 第三方授权登陆
+      register-url: /social/signUp
+      filter-processes-url: /social-login
+      bind-url: https://website/social-bind/qq
+      callback-url: https://website/social-login
+      connect-url: https://website/social-connect
+      qq: # qq授权配置
+        app-id: 1
+        app-secret: 1
+        provider-id: 1
+      wechat: # Wechat配置
+        qq.app-id: 1
+        app-secret: 1
+        provider-id: 1
+```
 
 
 ### 参数配置
+```properties
+
+
+
+```
