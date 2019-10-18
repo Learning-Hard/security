@@ -2,7 +2,6 @@ package io.github.learninghard.security.core.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Import;
 
 /**
  * \* Created with IntelliJ IDEA.
